@@ -12,36 +12,13 @@ namespace Day07
             string source = File.ReadAllText(@"..\..\input.txt");
             List<string> instructions = source.Split('\n').ToList();
 
-            int countSupportingTLS = 0;
-            foreach (string instruction in instructions)
-            {
-
-                string[] ipParts = instruction.Split('[', ']');
-
-
-                List<bool> tls = new List<bool>();
-
-                for (int i = 0; i < ipParts.Length; i++)
-                {
-                    if (i % 2 == 0)
-                    {
-                        tls.Add(HasABBA(ipParts[i]));
-                    }
-                    else
-                    {
-                        tls.Add(!HasABBA(ipParts[i]));
-                    }
-                }
-
-
-                IEnumerable<bool> evenTls = tls.ToList().Where((c, i) => i % 2 == 0);
-                IEnumerable<bool> oddTls = tls.ToList().Where((c, i) => i % 2 != 0);
-
-                if (evenTls.Any(a => a) && oddTls.All(a => a))
-                {
-                    countSupportingTLS++;
-                }
-            }
+            int countSupportingTLS = instructions
+               .Select(i => i.Split('[', ']'))
+               .Select(i => new List<IEnumerable<bool>>
+               {
+                   i.Where((c, a) => a % 2 == 0).Select(a => HasABBA(a)),
+                   i.Where((c, a) => a % 2 != 0).Select(a => HasABBA(a))
+               }).Count(i => i[0].Any(a => a) && i[1].All(a => !a));
 
             int countSupportingSSL = instructions
                .Select(i => i.Split('[', ']'))
@@ -68,7 +45,6 @@ namespace Day07
         {
             foreach (string hypernetSequence in hypernetSequences)
             {
-
                 if (abaList.Any(hypernetSequence.Contains))
                 {
                     return true;
@@ -90,11 +66,11 @@ namespace Day07
             return abaList;
         }
 
-        public static bool HasABBA(string ipPart)
+        public static bool HasABBA(string sequence)
         {
-            for (int i = 0; i < ipPart.Length - 3; i++)
+            for (int i = 0; i < sequence.Length - 3; i++)
             {
-                if (ipPart[i] == ipPart[i + 3] && ipPart[i + 1] == ipPart[i + 2] && ipPart[i] != ipPart[i + 1])
+                if (sequence[i] == sequence[i + 3] && sequence[i + 1] == sequence[i + 2] && sequence[i] != sequence[i + 1])
                 {
                     return true;
                 }
