@@ -10,7 +10,6 @@ namespace Day07
         public static void Main(string[] args)
         {
             string source = File.ReadAllText(@"..\..\input.txt");
-            source = source.Remove(source.Length - 1);
             List<string> instructions = source.Split('\n').ToList();
 
             int countSupportingTLS = 0;
@@ -44,66 +43,48 @@ namespace Day07
                 }
             }
 
-            int countSupportingSSL = 0;
+            int countSupportingSSL = instructions
+               .Select(i => i.Split('[', ']'))
+               .Select(i => new List<IEnumerable<string>>
+               {
+                   i.Where((c, a) => a % 2 == 0)
+                   .SelectMany(a => GetABA(a))
+                   .Select(aba => ConvertABAToBAB(aba)),
+                   i.Where((c, a) => a % 2 != 0)
+               }).Count(i => ContainsBAB(i[0], i[1]));
 
-            foreach (string instruction in instructions)
-            {
-                string[] ipParts = instruction.Split('[', ']');
-
-                List<string> abaList = new List<string>();
-
-
-                for (int i = 0; i < ipParts.Length; i++)
-                {
-                    if (i % 2 == 0)
-                    {
-                        abaList.AddRange(GetABA(ipParts[i]));
-                    }
-                }
-
-
-                List<string> babList = abaList.Select(aba => string.Join("", aba[1], aba[0], aba[1])).ToList();
-
-
-                bool containsBab = false;
-
-
-                for (int i = 0; i < ipParts.Length; i++)
-                {
-                    if (i % 2 == 1)
-                    {
-                        foreach (string bab in babList)
-                        {
-
-                            if (ipParts[i].Contains(bab))
-                            {
-                                containsBab = true;
-                            }
-
-                        }
-                    }
-                }
-
-                if (containsBab)
-                {
-                    countSupportingSSL++;
-                }
-            }
 
             Console.WriteLine("Part one = {0}", countSupportingTLS);
             Console.WriteLine("Part two = {0}", countSupportingSSL);
             Console.ReadLine();
+        }        
+
+        public static string ConvertABAToBAB(string aba)
+        {
+            return string.Join("", aba[1], aba[0], aba[1]);
         }
 
+        public static bool ContainsBAB(IEnumerable<string> abaList, IEnumerable<string> hypernetSequences)
+        {
+            foreach (string hypernetSequence in hypernetSequences)
+            {
 
-        public static List<string> GetABA(string ipPart)
+                if (abaList.Any(hypernetSequence.Contains))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static List<string> GetABA(string supernetSequence)
         {
             List<string> abaList = new List<string>();
-            for (int i = 0; i < ipPart.Length - 2; i++)
+            for (int i = 0; i < supernetSequence.Length - 2; i++)
             {
-                if (ipPart[i] == ipPart[i + 2] && ipPart[i] != ipPart[i + 1])
+                if (supernetSequence[i] == supernetSequence[i + 2] && supernetSequence[i] != supernetSequence[i + 1])
                 {
-                    abaList.Add(string.Join("", ipPart[i], ipPart[i + 1], ipPart[i + 2]));
+                    abaList.Add(string.Join("", supernetSequence[i], supernetSequence[i + 1], supernetSequence[i + 2]));
                 }
             }
             return abaList;
