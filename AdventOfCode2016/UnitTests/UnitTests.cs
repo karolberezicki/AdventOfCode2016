@@ -1,4 +1,5 @@
 using Day01;
+using Day09;
 using Xunit;
 
 namespace UnitTests
@@ -27,6 +28,20 @@ namespace UnitTests
             elves.ChangeDirection(turn);
             Assert.Equal(newDirection, elves.CurrentDirection);
         }
+        [Theory]
+        [InlineData("ADVENT", "ADVENT")]
+        [InlineData("A(1x5)BC", "ABBBBBC")]
+        [InlineData("(3x3)XYZ", "XYZXYZXYZ")]
+        [InlineData("A(2x2)BCD(2x2)EFG", "ABCBCDEFEFG")]
+        [InlineData("(6x1)(1x3)A", "(1x3)A")]
+        [InlineData("X(8x2)(3x3)ABCY", "X(3x3)ABC(3x3)ABCY")]
+        public void DecompressTests(string before, string after)
+        {
+            string decompressed = Program_09.Decompress(before).ToString();
+            Assert.Equal(after, decompressed);
+        }
+
+
 
     }
 }
