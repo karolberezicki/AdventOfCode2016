@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{03C6C698-BF2B-45FE-A519-1128A4B0681D}</ProjectGuid>
+    <ProjectGuid>{E81F602B-64F4-408B-B18D-01075607D3BE}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Day13</RootNamespace>
-    <AssemblyName>Day13</AssemblyName>
+    <RootNamespace>Day15</RootNamespace>
+    <AssemblyName>Day15</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -42,12 +42,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MazeState.cs" />
-    <Compile Include="Program_13.cs" />
+    <Compile Include="Disk.cs" />
+    <Compile Include="Program_15.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="input.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
