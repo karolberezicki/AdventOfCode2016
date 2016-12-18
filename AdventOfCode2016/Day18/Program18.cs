@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Day18
 {
-    public class Program_18
+    public class Program18
     {
         public static void Main(string[] args)
         {

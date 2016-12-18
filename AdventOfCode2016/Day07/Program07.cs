@@ -5,43 +5,43 @@ using System.Linq;
 
 namespace Day07
 {
-    public class Program_07
+    public class Program07
     {
         public static void Main(string[] args)
         {
             string source = File.ReadAllText(@"..\..\input.txt");
             List<string> instructions = source.Split('\n').ToList();
 
-            int countSupportingTLS = instructions
+            int countSupportingTls = instructions
                .Select(i => i.Split('[', ']'))
                .Select(i => new List<IEnumerable<bool>>
                {
-                   i.Where((c, a) => a % 2 == 0).Select(a => HasABBA(a)),
-                   i.Where((c, a) => a % 2 != 0).Select(a => HasABBA(a))
+                   i.Where((c, a) => a % 2 == 0).Select(HasAbba),
+                   i.Where((c, a) => a % 2 != 0).Select(HasAbba)
                }).Count(i => i[0].Any(a => a) && i[1].All(a => !a));
 
-            int countSupportingSSL = instructions
+            int countSupportingSsl = instructions
                .Select(i => i.Split('[', ']'))
                .Select(i => new List<IEnumerable<string>>
                {
                    i.Where((c, a) => a % 2 == 0)
-                   .SelectMany(a => GetABA(a))
-                   .Select(aba => ConvertABAToBAB(aba)),
+                   .SelectMany(GetAba)
+                   .Select(ConvertAbatoBab),
                    i.Where((c, a) => a % 2 != 0)
-               }).Count(i => ContainsBAB(i[0], i[1]));
+               }).Count(i => ContainsBab(i[0], i[1]));
 
 
-            Console.WriteLine("Part one = {0}", countSupportingTLS);
-            Console.WriteLine("Part two = {0}", countSupportingSSL);
+            Console.WriteLine("Part one = {0}", countSupportingTls);
+            Console.WriteLine("Part two = {0}", countSupportingSsl);
             Console.ReadLine();
         }        
 
-        public static string ConvertABAToBAB(string aba)
+        public static string ConvertAbatoBab(string aba)
         {
             return string.Join("", aba[1], aba[0], aba[1]);
         }
 
-        public static bool ContainsBAB(IEnumerable<string> abaList, IEnumerable<string> hypernetSequences)
+        public static bool ContainsBab(IEnumerable<string> abaList, IEnumerable<string> hypernetSequences)
         {
             foreach (string hypernetSequence in hypernetSequences)
             {
@@ -53,7 +53,7 @@ namespace Day07
             return false;
         }
 
-        public static List<string> GetABA(string supernetSequence)
+        public static List<string> GetAba(string supernetSequence)
         {
             List<string> abaList = new List<string>();
             for (int i = 0; i < supernetSequence.Length - 2; i++)
@@ -66,7 +66,7 @@ namespace Day07
             return abaList;
         }
 
-        public static bool HasABBA(string sequence)
+        public static bool HasAbba(string sequence)
         {
             for (int i = 0; i < sequence.Length - 3; i++)
             {

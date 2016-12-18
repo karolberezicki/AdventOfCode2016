@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Day02
 {
-    public class Program_02
+    public class Program02
     {
         public static void Main(string[] args)
         {
@@ -70,8 +70,6 @@ namespace Day02
                             break;
                         case 'R':
                             change = 1;
-                            break;
-                        default:
                             break;
                     }
                     // Skip change, if it's outside of actual keypad

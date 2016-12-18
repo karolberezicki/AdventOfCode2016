@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Day14
 {
-    public class Program_14
+    public class Program14
     {
         public static void Main(string[] args)
         {
@@ -24,8 +24,8 @@ namespace Day14
         {
             char[] alpha = "abcdefghijklmnopqrstuvwxyz1234567890".ToCharArray();
 
-            List<string> keys = new List<string>();
-            List<Triplet> triplets = new List<Triplet>();
+            HashSet<string> keys = new HashSet<string>();
+            HashSet<Triplet> triplets = new HashSet<Triplet>();
 
             int index = 0;
             while (keys.Count < 64)
@@ -48,7 +48,8 @@ namespace Day14
                     }
                 }
 
-                List<Triplet> tripletsToSearch = triplets.Where(t => t.Index < index && t.Index >= index - 1000).ToList();
+                var index1 = index;
+                IEnumerable<Triplet> tripletsToSearch = triplets.Where(t => t.Index < index1 && t.Index >= index1 - 1000);
 
                 foreach (Triplet triplet in tripletsToSearch)
                 {

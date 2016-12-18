@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Day11
 {
-    public class Program_11
+    public class Program11
     {
         public static void Main(string[] args)
         {

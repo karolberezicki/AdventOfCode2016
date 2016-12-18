@@ -45,7 +45,7 @@
     <Compile Include="Direction.cs" />
     <Compile Include="Elves.cs" />
     <Compile Include="Point.cs" />
-    <Compile Include="Program_01.cs" />
+    <Compile Include="Program01.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

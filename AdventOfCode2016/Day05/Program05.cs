@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
 
 namespace Day05
 {
-    public class Program_05
+    public class Program05
     {
         public static void Main(string[] args)
         {
@@ -27,7 +24,7 @@ namespace Day05
 
             while (password1.Any(c => c == placeholder))
             {
-                string hash = Utils.CalculateMD5Hash(md5, doorid + iterator);
+                string hash = Utils.CalculateMd5Hash(md5, doorid + iterator);
                 if (hash.StartsWith("00000"))
                 {
                     Utils.WriteProgress(password1, iterator);
@@ -47,7 +44,7 @@ namespace Day05
 
             while (password2.Any(c => c == placeholder))
             {
-                string hash = Utils.CalculateMD5Hash(md5, doorid + iterator);
+                string hash = Utils.CalculateMd5Hash(md5, doorid + iterator);
 
                 if (hash.StartsWith("00000"))
                 {
@@ -81,7 +78,7 @@ namespace Day05
 
     public static class Utils
     {
-        public static string CalculateMD5Hash(MD5 md5, string input)
+        public static string CalculateMd5Hash(MD5 md5, string input)
         {
             // step 1, calculate MD5 hash from input
             byte[] inputBytes = Encoding.ASCII.GetBytes(input);

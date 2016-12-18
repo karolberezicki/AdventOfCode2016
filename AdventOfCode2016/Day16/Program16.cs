@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Day16
 {
-    public class Program_16
+    public class Program16
     {
         public static void Main(string[] args)
         {

@@ -37,7 +37,7 @@ namespace UnitTests
         [InlineData("X(8x2)(3x3)ABCY", "X(3x3)ABC(3x3)ABCY")]
         public void DecompressTests(string before, string after)
         {
-            string decompressed = Program_09.Decompress(before).ToString();
+            string decompressed = Program09.Decompress(before).ToString();
             Assert.Equal(after, decompressed);
         }
 

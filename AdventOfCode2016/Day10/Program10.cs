@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Day10
 {
-    public partial class Program_10
+    public partial class Program10
     {
         public static void Main(string[] args)
         {

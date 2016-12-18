@@ -2,7 +2,7 @@
 
 namespace Day10
 {
-    public partial class Program_10
+    public partial class Program10
     {
 
         [DebuggerDisplay("Number = {Number}, Value = {Value}")]

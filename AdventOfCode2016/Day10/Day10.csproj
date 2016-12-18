@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="Bot.cs" />
     <Compile Include="Output.cs" />
-    <Compile Include="Program_10.cs" />
+    <Compile Include="Program10.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

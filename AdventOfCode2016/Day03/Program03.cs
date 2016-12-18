@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Day03
 {
-    public class Program_03
+    public class Program03
     {
         public static void Main(string[] args)
         {
@@ -14,7 +14,7 @@ namespace Day03
             List<string> instructions = source.Split('\n').ToList();
 
             int countTrianglesPartOne = instructions
-                .Select(i => SplitPoints(i))
+                .Select(SplitPoints)
                 .Select(t => new Triangle(t))
                 .Count(t => t.IsValidTriangle);
 

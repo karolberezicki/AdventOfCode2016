@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Day09
 {
-    public class Program_09
+    public class Program09
     {
         public static void Main(string[] args)
         {
@@ -61,8 +59,6 @@ namespace Day09
                     }
 
                     i += subsequentCharacters + marker.Length - 1;
-                    continue;
-
                 }
                 else
                 {

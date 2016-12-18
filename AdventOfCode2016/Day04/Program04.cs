@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Day04
 {
-    public class Program_04
+    public class Program04
     {
         public static void Main(string[] args)
         {
@@ -29,7 +28,7 @@ namespace Day04
                 string checksum = parts[1].Replace("]", "").Replace("\r", "");
                 int checksumLength = checksum.Length;
 
-                foreach (char letter in name.ToCharArray())
+                foreach (char letter in name)
                 {
                     if (char.IsLetter(letter))
                     {
