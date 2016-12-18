@@ -53,7 +53,7 @@ namespace Day18
 
         private static char GetNewTile(char safeTile, char trap, char left, char right)
         {
-            return (left == trap && right == safeTile) || (right == trap && left == safeTile) ? trap : safeTile;
+            return left != right ? trap : safeTile;
         }
     }
 }
