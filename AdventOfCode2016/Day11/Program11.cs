@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,6 +39,37 @@ namespace Day11
             }
 
             DisplayFloors(floors);
+
+
+
+            Queue<State> queue = new Queue<State>();
+
+
+            while (queue.Count > 0)
+            {
+                var currentState = queue.Dequeue();
+
+
+                if (true) // is Goal
+                {
+                    
+                }
+
+                else
+                {
+                    //add child states
+                    // queue.Enqueue(states)
+
+
+
+                }
+
+
+
+            }
+
+
+
             Console.ReadLine();
         }
 
@@ -50,4 +82,11 @@ namespace Day11
             }
         }
     }
+
+    public class State
+    {
+        
+    }
+
+
 }
