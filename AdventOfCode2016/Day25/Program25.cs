@@ -13,7 +13,7 @@ namespace Day25
             source = source.Remove(source.Length - 1);
             List<string> instructions = source.Split('\n').ToList();
 
-            const string clockSignal = "0101010101010101";
+            const string clockSignal = "01010101";
 
             Dictionary<char, int> registers = new Dictionary<char, int>
             {
