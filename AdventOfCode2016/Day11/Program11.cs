@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,18 +9,115 @@ namespace Day11
     {
         public static void Main(string[] args)
         {
-            string source = File.ReadAllText(@"..\..\input.txt");
+            string source = File.ReadAllText(@"..\..\input2.txt");
             source = source.Remove(source.Length - 1);
             List<string> instructions = source.Split('\n').ToList();
+            List<HashSet<string>> floors = GenerateInitalFloors(instructions);
+            DisplayFloors(floors);
+
+            State startState = new State { Elevator = 0, Floors = floors, Move = 0 };
+            HashSet<string> finishFloor = GetFinishFloor(floors);
+            State finishState = Solve(startState, finishFloor);
+
+            int partOne = finishState.Move;
+
+            Console.WriteLine("Part one = {0}", partOne);
+            Console.ReadLine();
+        }
+
+        private static State Solve(State startState, HashSet<string> finishFloor)
+        {
+            Queue<State> queue = new Queue<State>();
+            HashSet<State> seenStates = new HashSet<State>();
+
+            queue.Enqueue(startState);
+            seenStates.Add(startState);
+
+            while (queue.Count > 0)
+            {
+                State currentState = queue.Dequeue();
+
+                if (currentState.Floors.Last().SetEquals(finishFloor))
+                {
+                    return currentState;
+                }
+
+                List<State> newStates = new List<State>();
+
+                List<string> currentFloor = currentState.Floors[currentState.Elevator].ToList();
+
+                if (currentState.Elevator != 0)
+                {
+                    // Add states downwards
+                    foreach (string element in currentFloor)
+                    {
+                        State newState = Utils.DeepClone(currentState);
+                        newState.Elevator = newState.Elevator - 1;
+                        newState.Move = newState.Move + 1;
 
 
-            List<List<string>> floors = new List<List<string>>();
+                        newState.Floors[currentState.Elevator].Remove(element);
+                        newState.Floors[currentState.Elevator - 1].Add(element);
+                        newStates.Add(newState);
+                    }
+                }
+
+                if (currentState.Elevator != currentState.Floors.Count - 1)
+                {
+                    // Add states upwards
+                    foreach (string firstElement in currentFloor)
+                    {
+                        List<string> currentFloorExceptFirstElement = currentFloor.Where(e => e != firstElement).ToList();
+
+                        foreach (string secondElement in currentFloorExceptFirstElement)
+                        {
+                            State newState = Utils.DeepClone(currentState);
+                            newState.Elevator = newState.Elevator + 1;
+                            newState.Move = newState.Move + 1;
+
+                            newState.Floors[currentState.Elevator].Remove(firstElement);
+                            newState.Floors[currentState.Elevator + 1].Add(firstElement);
+                            newState.Floors[currentState.Elevator].Remove(secondElement);
+                            newState.Floors[currentState.Elevator + 1].Add(secondElement);
+
+                            newStates.Add(newState);
+
+                        }
+                    }
+                }
+
+
+                newStates = newStates.Where(s => s.IsValid && !queue.Contains(s) && !seenStates.Contains(s)).ToList();
+                foreach (State newState in newStates)
+                {
+                    seenStates.Add(newState);
+                    queue.Enqueue(newState);
+                }
+            }
+
+            return null;
+        }
+
+        private static HashSet<string> GetFinishFloor(List<HashSet<string>> floors)
+        {
+            HashSet<string> finishFloor = new HashSet<string>();
+            foreach (HashSet<string> floor in floors)
+            {
+                finishFloor.UnionWith(floor);
+            }
+
+            return finishFloor;
+        }
+
+        private static List<HashSet<string>> GenerateInitalFloors(List<string> instructions)
+        {
+            List<HashSet<string>> floors = new List<HashSet<string>>();
 
             foreach (string instruction in instructions)
             {
-                List<string> floor = new List<string>();
+                HashSet<string> floor = new HashSet<string>();
 
-                string[] parts = instruction.Replace(",", "").Replace(".", "").Split(' ');
+                string[] parts = instruction.Replace(",", "").Replace(".", "").Replace("\r", "").Split(' ');
 
                 for (int i = 0; i < parts.Length; i++)
                 {
@@ -38,55 +134,16 @@ namespace Day11
 
             }
 
-            DisplayFloors(floors);
-
-
-
-            Queue<State> queue = new Queue<State>();
-
-
-            while (queue.Count > 0)
-            {
-                var currentState = queue.Dequeue();
-
-
-                if (true) // is Goal
-                {
-                    
-                }
-
-                else
-                {
-                    //add child states
-                    // queue.Enqueue(states)
-
-
-
-                }
-
-
-
-            }
-
-
-
-            Console.ReadLine();
+            return floors;
         }
 
-        private static void DisplayFloors(IList<List<string>> floors)
+        private static void DisplayFloors(IList<HashSet<string>> floors)
         {
-            foreach (List<string> list in floors)
+            foreach (HashSet<string> list in floors)
             {
                 Console.Write("Floor {0}: ", floors.IndexOf(list) + 1);
                 Console.WriteLine(string.Join(", ", list));
             }
         }
     }
-
-    public class State
-    {
-        
-    }
-
-
 }
