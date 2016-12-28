@@ -16,50 +16,20 @@ namespace Day11
 
         private static bool IsVaildFloor(HashSet<string> floor)
         {
-            bool containsPair = false;
+            bool containsPair = floor.Where(e => e.EndsWith("M"))
+                .Any(element => floor.Contains(element.Replace("M", "G")));
 
-            foreach (string element in floor.Where(e => e.EndsWith("M")))
-            {
-                if (!floor.Contains(element.Replace("M", "G")))
-                {
-                    continue;
-                }
+            bool hasSingleChip = floor.Where(e => e.EndsWith("M"))
+                .Any(element => !floor.Contains(element.Replace("M", "G")));
 
-                containsPair = true;
-                break;
-            }
-
-
-            bool hasSingleChip = false;
-
-            foreach (string element in floor.Where(e => e.EndsWith("M")))
-            {
-                if (!floor.Contains(element.Replace("M", "G")))
-                {
-                    hasSingleChip = true;
-                    break;
-                }
-                
-            }
-
-
-            if (containsPair && hasSingleChip)
-            {
-                return false;
-            }
-
-            return true;
+            return !containsPair || !hasSingleChip;
         }
 
         public override bool Equals(object obj)
         {
             State stateObj = obj as State;
-            if (stateObj == null)
-            {
-                return false;
-            }
 
-            if (Elevator != stateObj.Elevator)
+            if (Elevator != stateObj?.Elevator)
             {
                 return false;
             }
