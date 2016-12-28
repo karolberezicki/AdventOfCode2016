@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Day11
 {
@@ -79,5 +80,21 @@ namespace Day11
                 return hash ^ Elevator.GetHashCode();
             }
         }
+
+        public string GetCode()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(Elevator);
+
+            foreach (HashSet<string> floor in Floors)
+            {
+                int countMicrochips = floor.Count(e => e.EndsWith("M"));
+                int countGenerators = floor.Count(e => e.EndsWith("G"));
+                sb.Append($"{countMicrochips}M{countGenerators}G");
+            }
+            return sb.ToString();
+        }
+
     }
 }

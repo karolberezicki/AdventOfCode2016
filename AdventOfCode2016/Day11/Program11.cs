@@ -9,7 +9,7 @@ namespace Day11
     {
         public static void Main(string[] args)
         {
-            string source = File.ReadAllText(@"..\..\input2.txt");
+            string source = File.ReadAllText(@"..\..\input.txt");
             source = source.Remove(source.Length - 1);
             List<string> instructions = source.Split('\n').ToList();
             List<HashSet<string>> floors = GenerateInitalFloors(instructions);
@@ -22,17 +22,31 @@ namespace Day11
             int partOne = finishState.Move;
 
             Console.WriteLine("Part one = {0}", partOne);
+
+
+            instructions[0] = instructions[0] +
+                " an elerium generator, an elerium-compatible microchip, a dilithium generator, a dilithium-compatible microchip";
+            floors = GenerateInitalFloors(instructions);
+            DisplayFloors(floors);
+
+            startState = new State { Elevator = 0, Floors = floors, Move = 0 };
+            finishFloor = GetFinishFloor(floors);
+            State finishStatePartTwo = Solve(startState, finishFloor);
+
+            int partTwo = finishStatePartTwo.Move;
+
+            Console.WriteLine("Part two = {0}", partTwo);
+
             Console.ReadLine();
         }
 
         private static State Solve(State startState, HashSet<string> finishFloor)
         {
             Queue<State> queue = new Queue<State>();
-            HashSet<State> seenStates = new HashSet<State>();
+            HashSet<string> seenStates = new HashSet<string>();
 
             queue.Enqueue(startState);
-            seenStates.Add(startState);
-
+            seenStates.Add(startState.GetCode());
             while (queue.Count > 0)
             {
                 State currentState = queue.Dequeue();
@@ -87,10 +101,10 @@ namespace Day11
                 }
 
 
-                newStates = newStates.Where(s => s.IsValid && !queue.Contains(s) && !seenStates.Contains(s)).ToList();
+                newStates = newStates.Where(s => s.IsValid && !queue.Contains(s) && !seenStates.Contains(s.GetCode())).ToList();
                 foreach (State newState in newStates)
                 {
-                    seenStates.Add(newState);
+                    seenStates.Add(newState.GetCode());
                     queue.Enqueue(newState);
                 }
             }
@@ -98,7 +112,7 @@ namespace Day11
             return null;
         }
 
-        private static HashSet<string> GetFinishFloor(List<HashSet<string>> floors)
+        private static HashSet<string> GetFinishFloor(IEnumerable<HashSet<string>> floors)
         {
             HashSet<string> finishFloor = new HashSet<string>();
             foreach (HashSet<string> floor in floors)
@@ -109,7 +123,7 @@ namespace Day11
             return finishFloor;
         }
 
-        private static List<HashSet<string>> GenerateInitalFloors(List<string> instructions)
+        private static List<HashSet<string>> GenerateInitalFloors(IEnumerable<string> instructions)
         {
             List<HashSet<string>> floors = new List<HashSet<string>>();
 
