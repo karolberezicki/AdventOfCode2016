@@ -16,8 +16,7 @@ namespace Day11
             DisplayFloors(floors);
 
             State startState = new State { Elevator = 0, Floors = floors, Move = 0 };
-            HashSet<string> finishFloor = GetFinishFloor(floors);
-            State finishState = Solve(startState, finishFloor);
+            State finishState = Solve(startState);
 
             int partOne = finishState.Move;
 
@@ -29,8 +28,7 @@ namespace Day11
             DisplayFloors(floors);
 
             startState = new State { Elevator = 0, Floors = floors, Move = 0 };
-            finishFloor = GetFinishFloor(floors);
-            State finishStatePartTwo = Solve(startState, finishFloor);
+            State finishStatePartTwo = Solve(startState);
 
             int partTwo = finishStatePartTwo.Move;
 
@@ -39,8 +37,10 @@ namespace Day11
             Console.ReadLine();
         }
 
-        private static State Solve(State startState, HashSet<string> finishFloor)
+        private static State Solve(State startState)
         {
+            HashSet<string> finishFloor = GetFinishFloor(startState.Floors);
+
             Queue<State> queue = new Queue<State>();
             HashSet<string> seenStates = new HashSet<string>();
 
