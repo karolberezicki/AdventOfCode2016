@@ -65,17 +65,16 @@ namespace Day11
 
                 if (currentState.Elevator != 0 && !areFloorsBelowEmpty)
                 {
-                    GenerateStatesDownwards(currentState, newStates, currentFloor);
+                    newStates.UnionWith(GenerateStatesDownwards(currentState, currentFloor));
                 }
 
                 if (currentState.Elevator != currentState.Floors.Count - 1)
                 {
-                    GenerateStatesUpwards(currentState, newStates, currentFloor);
+                    newStates.UnionWith(GenerateStatesUpwards(currentState, currentFloor));
                 }
 
                 newStates = new HashSet<State>(newStates
-                    .Where(s => s.IsValid && !queue.Contains(s) 
-                    && !seenStates.Contains(s.GetCode()))
+                    .Where(s => s.IsValid && !seenStates.Contains(s.GetCode()))
                     .DistinctBy(s => s.GetCode()));
 
                 foreach (State newState in newStates)
@@ -88,8 +87,10 @@ namespace Day11
             return null;
         }
 
-        private static void GenerateStatesDownwards(State currentState, ISet<State> newStates, IEnumerable<string> currentFloor)
+        private static IEnumerable<State> GenerateStatesDownwards(State currentState, IEnumerable<string> currentFloor)
         {
+            HashSet<State> newStates = new HashSet<State>();
+
             foreach (string element in currentFloor)
             {
                 State newState = Utils.DeepClone(currentState);
@@ -100,10 +101,14 @@ namespace Day11
                 newState.Floors[currentState.Elevator - 1].Add(element);
                 newStates.Add(newState);
             }
+
+            return newStates;
         }
 
-        private static void GenerateStatesUpwards(State currentState, ISet<State> newStates, List<string> currentFloor)
+        private static IEnumerable<State> GenerateStatesUpwards(State currentState, List<string> currentFloor)
         {
+            HashSet<State> newStates = new HashSet<State>();
+
             foreach (string firstElement in currentFloor)
             {
                 List<string> currentFloorExceptFirstElement = currentFloor.Where(e => e != firstElement).ToList();
@@ -122,6 +127,8 @@ namespace Day11
 
                 }
             }
+
+            return newStates;
         }
 
         private static HashSet<string> GetFinishFloor(IEnumerable<HashSet<string>> floors)
