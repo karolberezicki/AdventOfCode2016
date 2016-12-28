@@ -23,7 +23,6 @@ namespace Day11
 
             Console.WriteLine("Part one = {0}", partOne);
 
-
             instructions[0] = instructions[0] +
                 " an elerium generator, an elerium-compatible microchip, a dilithium generator, a dilithium-compatible microchip";
             floors = GenerateInitalFloors(instructions);
@@ -56,52 +55,29 @@ namespace Day11
                     return currentState;
                 }
 
-                List<State> newStates = new List<State>();
+                HashSet<State> newStates = new HashSet<State>();
 
                 List<string> currentFloor = currentState.Floors[currentState.Elevator].ToList();
 
-                if (currentState.Elevator != 0)
+                bool areFloorsBelowEmpty = currentState.Floors
+                    .Where(f => currentState.Floors.IndexOf(f) < currentState.Elevator)
+                    .All(f => f.Count == 0);
+
+                if (currentState.Elevator != 0 && !areFloorsBelowEmpty)
                 {
-                    // Add states downwards
-                    foreach (string element in currentFloor)
-                    {
-                        State newState = Utils.DeepClone(currentState);
-                        newState.Elevator = newState.Elevator - 1;
-                        newState.Move = newState.Move + 1;
-
-
-                        newState.Floors[currentState.Elevator].Remove(element);
-                        newState.Floors[currentState.Elevator - 1].Add(element);
-                        newStates.Add(newState);
-                    }
+                    GenerateStatesDownwards(currentState, newStates, currentFloor);
                 }
 
                 if (currentState.Elevator != currentState.Floors.Count - 1)
                 {
-                    // Add states upwards
-                    foreach (string firstElement in currentFloor)
-                    {
-                        List<string> currentFloorExceptFirstElement = currentFloor.Where(e => e != firstElement).ToList();
-
-                        foreach (string secondElement in currentFloorExceptFirstElement)
-                        {
-                            State newState = Utils.DeepClone(currentState);
-                            newState.Elevator = newState.Elevator + 1;
-                            newState.Move = newState.Move + 1;
-
-                            newState.Floors[currentState.Elevator].Remove(firstElement);
-                            newState.Floors[currentState.Elevator + 1].Add(firstElement);
-                            newState.Floors[currentState.Elevator].Remove(secondElement);
-                            newState.Floors[currentState.Elevator + 1].Add(secondElement);
-
-                            newStates.Add(newState);
-
-                        }
-                    }
+                    GenerateStatesUpwards(currentState, newStates, currentFloor);
                 }
 
+                newStates = new HashSet<State>(newStates
+                    .Where(s => s.IsValid && !queue.Contains(s) 
+                    && !seenStates.Contains(s.GetCode()))
+                    .DistinctBy(s => s.GetCode()));
 
-                newStates = newStates.Where(s => s.IsValid && !queue.Contains(s) && !seenStates.Contains(s.GetCode())).ToList();
                 foreach (State newState in newStates)
                 {
                     seenStates.Add(newState.GetCode());
@@ -110,6 +86,42 @@ namespace Day11
             }
 
             return null;
+        }
+
+        private static void GenerateStatesDownwards(State currentState, ISet<State> newStates, IEnumerable<string> currentFloor)
+        {
+            foreach (string element in currentFloor)
+            {
+                State newState = Utils.DeepClone(currentState);
+                newState.Elevator = newState.Elevator - 1;
+                newState.Move = newState.Move + 1;
+
+                newState.Floors[currentState.Elevator].Remove(element);
+                newState.Floors[currentState.Elevator - 1].Add(element);
+                newStates.Add(newState);
+            }
+        }
+
+        private static void GenerateStatesUpwards(State currentState, ISet<State> newStates, List<string> currentFloor)
+        {
+            foreach (string firstElement in currentFloor)
+            {
+                List<string> currentFloorExceptFirstElement = currentFloor.Where(e => e != firstElement).ToList();
+
+                foreach (string secondElement in currentFloorExceptFirstElement)
+                {
+                    State newState = Utils.DeepClone(currentState);
+                    newState.Elevator = newState.Elevator + 1;
+                    newState.Move = newState.Move + 1;
+
+                    newState.Floors[currentState.Elevator].Remove(firstElement);
+                    newState.Floors[currentState.Elevator + 1].Add(firstElement);
+                    newState.Floors[currentState.Elevator].Remove(secondElement);
+                    newState.Floors[currentState.Elevator + 1].Add(secondElement);
+                    newStates.Add(newState);
+
+                }
+            }
         }
 
         private static HashSet<string> GetFinishFloor(IEnumerable<HashSet<string>> floors)

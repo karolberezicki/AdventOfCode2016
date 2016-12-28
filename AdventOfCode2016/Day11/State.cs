@@ -85,7 +85,7 @@ namespace Day11
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(Elevator);
+            sb.Append($"{Elevator}E");
 
             foreach (HashSet<string> floor in Floors)
             {
